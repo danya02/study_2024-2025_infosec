@@ -8,7 +8,7 @@ import uuid
 
 import convert_to_requests
 import requests
-lab_number = int(input("What is the lab number? "))
+lab_number = int(input("What is the individual project number? "))
 print("Step 1: make videos")
 
 GH_REPO = "danya02/study_2024-2025_infosec"
@@ -97,7 +97,7 @@ s = session.patch("https://studio-api.g1.plvideo.ru/v1/videos/" + sign['videoId'
                  "visible": "link",
                  "playlistIds": [PLVIDEO_PLAYLIST_ID],
                  "tags": [],
-                 "title": "Лабораторная работа No" + str(lab_number) + " выполнение",
+                 "title": "Индивидуальный проект No" + str(lab_number) + " выполнение",
                  "description": ""
              })
 print("Response: ", s.status_code, s.text)
@@ -188,7 +188,7 @@ s = session.patch("https://studio-api.g1.plvideo.ru/v1/videos/" + sign['videoId'
                  "visible": "link",
                  "playlistIds": [PLVIDEO_PLAYLIST_ID],
                  "tags": [],
-                 "title": "Лабораторная работа No" + str(lab_number) + " презентация",
+                 "title": "Индивидуальный проект No" + str(lab_number) + " презентация",
                  "description": ""
              })
 print("Response: ", s.status_code, s.text)
@@ -253,11 +253,11 @@ videoid_present = upload_data['video']
 print(f"{sid_present=} {videoid_present=}")
 
 print("4.4: setting params")
-patch_work = session.patch(f"https://studio.rutube.ru/api/video/{videoid_work}/?308&client=vl", data={"title": f"Лабораторная работа {lab_number} выполнение", "is_hidden": True, "category": "13", "is_adult": True})
+patch_work = session.patch(f"https://studio.rutube.ru/api/video/{videoid_work}/?308&client=vl", data={"title": f"Индивидуальный проект {lab_number} выполнение", "is_hidden": True, "category": "13", "is_adult": True})
 patch_work.raise_for_status()
 rutube_work_info = patch_work.json()
 
-patch_present = session.patch(f"https://studio.rutube.ru/api/video/{videoid_present}/?308&client=vl", data={"title": f"Лабораторная работа {lab_number} презентация", "is_hidden": True, "category": "13", "is_adult": True})
+patch_present = session.patch(f"https://studio.rutube.ru/api/video/{videoid_present}/?308&client=vl", data={"title": f"Индивидуальный проект {lab_number} презентация", "is_hidden": True, "category": "13", "is_adult": True})
 patch_present.raise_for_status()
 rutube_present_info = patch_present.json()
 
@@ -286,7 +286,7 @@ input("Press Enter to continue to building documents...")
 print("Step 5: build documents")
 
 cwd = os.getcwd()
-os.chdir(f"../labs/lab{lab_number}/report")
+os.chdir(f"../project-personal/stage{lab_number}/report")
 os.system("make")
 os.chdir("../presentation")
 makefile = open("Makefile").read()
@@ -374,6 +374,5 @@ print("When you're done, you can clean up with:")
 print()
 print("rm -r", gh)
 print("rm -r", mo)
-print("rm ./meta.json ./work.json ./present.json")
 print("rm", work)
 print("rm", present)
