@@ -3,6 +3,7 @@ import mimetypes
 import os
 import time
 import uuid
+import shutil
 
 # Requires the `zip` command to be present
 

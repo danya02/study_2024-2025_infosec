@@ -3,12 +3,13 @@ import mimetypes
 import os
 import time
 import uuid
+import shutil
 
 # Requires the `zip` command to be present
 
 import convert_to_requests
 import requests
-lab_number = int(input("What is the individual project number? "))
+proj_number = int(input("What is the individual project number? "))
 print("Step 1: make videos")
 
 GH_REPO = "danya02/study_2024-2025_infosec"
@@ -97,7 +98,7 @@ s = session.patch("https://studio-api.g1.plvideo.ru/v1/videos/" + sign['videoId'
                  "visible": "link",
                  "playlistIds": [PLVIDEO_PLAYLIST_ID],
                  "tags": [],
-                 "title": "Индивидуальный проект No" + str(lab_number) + " выполнение",
+                 "title": "Индивидуальный проект No" + str(proj_number) + " выполнение",
                  "description": ""
              })
 print("Response: ", s.status_code, s.text)
@@ -188,7 +189,7 @@ s = session.patch("https://studio-api.g1.plvideo.ru/v1/videos/" + sign['videoId'
                  "visible": "link",
                  "playlistIds": [PLVIDEO_PLAYLIST_ID],
                  "tags": [],
-                 "title": "Индивидуальный проект No" + str(lab_number) + " презентация",
+                 "title": "Индивидуальный проект No" + str(proj_number) + " презентация",
                  "description": ""
              })
 print("Response: ", s.status_code, s.text)
@@ -253,11 +254,11 @@ videoid_present = upload_data['video']
 print(f"{sid_present=} {videoid_present=}")
 
 print("4.4: setting params")
-patch_work = session.patch(f"https://studio.rutube.ru/api/video/{videoid_work}/?308&client=vl", data={"title": f"Индивидуальный проект {lab_number} выполнение", "is_hidden": True, "category": "13", "is_adult": True})
+patch_work = session.patch(f"https://studio.rutube.ru/api/video/{videoid_work}/?308&client=vl", data={"title": f"Индивидуальный проект {proj_number} выполнение", "is_hidden": True, "category": "13", "is_adult": True})
 patch_work.raise_for_status()
 rutube_work_info = patch_work.json()
 
-patch_present = session.patch(f"https://studio.rutube.ru/api/video/{videoid_present}/?308&client=vl", data={"title": f"Индивидуальный проект {lab_number} презентация", "is_hidden": True, "category": "13", "is_adult": True})
+patch_present = session.patch(f"https://studio.rutube.ru/api/video/{videoid_present}/?308&client=vl", data={"title": f"Индивидуальный проект {proj_number} презентация", "is_hidden": True, "category": "13", "is_adult": True})
 patch_present.raise_for_status()
 rutube_present_info = patch_present.json()
 
@@ -286,7 +287,7 @@ input("Press Enter to continue to building documents...")
 print("Step 5: build documents")
 
 cwd = os.getcwd()
-os.chdir(f"../project-personal/stage{lab_number}/report")
+os.chdir(f"../project-personal/stage{proj_number}/report")
 os.system("make")
 os.chdir("../presentation")
 makefile = open("Makefile").read()
@@ -309,16 +310,15 @@ if os.path.exists(mo):
 os.makedirs(gh)
 os.makedirs(mo)
 
-import shutil
 shutil.copy("report/report.md", gh)  # отчёт в markdown (в каталоге git и в файлах релиза);
 shutil.copy("report/report.docx", gh)  # отчёт в docx (сделанный из markdown) (приложено к ответу и в файлах релиза);
 shutil.copy("report/report.docx", mo)
 shutil.copy("report/report.pdf", gh)  # отчёт в pdf (сделанный из markdown) (приложено к ответу и в файлах релиза);
 shutil.copy("report/report.pdf", mo)
 
-os.system(f"zip -r /tmp/lab{lab_number}.zip *")
-shutil.copy(f"/tmp/lab{lab_number}.zip", mo)  # архив с исходными материалами markdown (текстовые файлы, скриншоты и т. д.);
-shutil.copy(f"/tmp/lab{lab_number}.zip", gh)
+os.system(f"zip -r /tmp/lab{proj_number}.zip *")
+shutil.copy(f"/tmp/lab{proj_number}.zip", mo)  # архив с исходными материалами markdown (текстовые файлы, скриншоты и т. д.);
+shutil.copy(f"/tmp/lab{proj_number}.zip", gh)
 
 shutil.copy("presentation/presentation.pdf", gh)  # презентацию в pdf и html (сделанные из markdown) (приложено к ответу и в файлах релиза);
 shutil.copy("presentation/presentation.html", gh)
@@ -339,7 +339,7 @@ release_tag = input("Please enter the release tag here (like v0.1.0): ")
 print("Step 8: Moodle submission")
 print("Go to:")
 print("\t https://esystem.rudn.ru/course/view.php?id=11801#section-10")
-print("and draft a new submission for lab", lab_number)
+print("and draft a new submission for project", proj_number)
 
 print("Upload all files from:")
 print("\t", mo)
@@ -347,7 +347,7 @@ print("\t", mo)
 print("Use this as body text:")
 print("---")
 
-print("Лаб", lab_number)
+print("Индивидуальный проект ", proj_number)
 print()
 print("RUTUBE:")
 print(f"Плейлист: https://rutube.ru/plst/{RUTUBE_PLAYLIST_ID}")
