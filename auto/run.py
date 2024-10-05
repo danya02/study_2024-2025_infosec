@@ -24,7 +24,7 @@ present = os.path.abspath(input("Path to present video: ").replace("'", ''))
 
 print("Step 2: upload videos to Plvideo")
 
-print("2.1: go on https://studio.plvideo.ru and copy any request as curl")
+print("2.1: go on https://studio.plvideo.ru and copy any request to 'studio-api.g1.plvideo.ru' as curl")
 req = convert_to_requests.curl_to_requests(input("Paste it here or empty to use request-plvideo.txt: ") or open('request-plvideo.txt').read())
 session = requests.Session()
 session.headers = req.headers
